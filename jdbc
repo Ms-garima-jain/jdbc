@@ -1,0 +1,75 @@
+1.
+Create a MySQL Database Table:
+
+Table Name: students
+Columns: id (INT, Primary Key, Auto-increment), name (VARCHAR), age (INT), department (VARCHAR)
+Perform CRUD Operations Using Statement:
+Insert student records.
+Retrieve and display all student records.
+Update a student's department.
+Delete a student record.
+------------------------------------
+package assighnment;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+public class Demo {
+public static void main ( String [] args ) throws SQLException
+
+{
+String url = "jdbc:mysql://localhost:3306/crud";
+Connection con = DriverManager.getConnection (url, "root", "root");
+System.out.println ("coonection ho gaya " );
+Statement st =  con.createStatement ();
+System.out.println("statement object created " );
+/*
+st.executeUpdate("create table students (id int primary key  auto_increment, name varchar (50), age int , department varchar (50))");
+*/
+System .out.println (" Table created " );
+System.out.println ( " Enter number of entries " );
+Scanner scn = new Scanner ( System.in );
+
+int n = scn.nextInt ();
+scn.nextLine ();
+
+for ( int i=0; i<n ; i++ ) {
+String name = scn.nextLine ();
+int age= Integer.parseInt(scn.nextLine ());
+String department = scn.nextLine ();
+String query = String.format("insert into students (name, age , department) values ('%s', %d, '%s')", name , age , department);
+st.executeUpdate(query);
+System.out.println ("data inserted " );
+}
+System.out.println ( " Retrieving the data " );
+
+ResultSet rs = st.executeQuery("select * from students " );
+while (rs.next ())
+{
+	System.out.println ( rs.getInt(1));
+	
+System.out.println ( rs.getString (2));
+System.out.println ( rs.getInt (3));
+System.out.println ( rs.getString (4));
+System.out.println ();
+
+
+}
+System.out.println ( " update a student department enter name " );
+String name = scn.nextLine ();
+System.out.println ( " Enter department name " );
+String departmentname = scn.nextLine ();
+st.executeUpdate("UPDATE students set department = '"+departmentname+"' where name ='"+name+"';");
+System.out.println ( " data updated successfully");
+System.out.println ( " enter a student recordto delete " );
+String dname=scn.nextLine ();
+st.executeUpdate(" delete from students where name = '"+dname+"';");
+System.out.println ( " data deleted successfully " );
+
+}
+}
+
