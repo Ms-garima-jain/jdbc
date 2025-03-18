@@ -1,0 +1,112 @@
+A company wants to develop an Employee Management System that allows the HR department to manage employee records efficiently. The system should allow the HR team to:
+ Add new employees with details such as name, department, salary, and email.
+ Retrieve and display all employees from the database.
+ Update the salary of an existing employee.
+Delete an employee record based on their employee ID.
+
+The system should provide a menu-driven console interface where HR can choose an operation and provide the necessary input.
+
+Table Name: employees
+Column Name	Data Type	Description
+id		INT (PK)	Unique Employee ID (Auto-increment)
+name		VARCHAR(100)	Employee's Name
+department	VARCHAR(100)	Department Name
+salary		DOUBLE		Employee Salary
+email		VARCHAR(100)	Employee Email Address
+---------------------------------------------------------
+
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+public class Demo3 {
+	public static void main ( String [] args ) throws SQLException {
+	 String url = "jdbc:mysql://localhost:3306/Company";
+     Connection con = DriverManager.getConnection(url, "root", "root");
+     System.out.println("connection done 3");
+     Statement st = con.createStatement();
+     System.out.println("statement object created");
+     //st.executeUpdate("create table employee (id int  unique  auto_increment, name varchar (100), department varchar (100), salary double ,  email varchar (100))");
+     System.out.println ( " table create ho gaya he");
+     System .out .println ( " enter 1 to insert data ,  enter 2  retrieve data , enter 3 to update data , enter 4 to delete data, enter 5 to exit the program ");
+     Scanner scn = new Scanner (System.in);
+     int choice ;
+     do {
+     choice= scn.nextInt ();
+     
+    
+    	  switch (choice)
+    	  {
+    	  
+    	  case 1 : System.out.println ( " Enter number to record  how many entries  have to recpord ");
+    	  int n = scn .nextInt ();
+    	  for (int i =0; i<n ; i++)
+    	  {
+    		  
+    		  System.out.println ( " Enter name ");
+    		   String name = scn.nextLine ();
+    		   scn.nextLine ();
+     		  System.out.println ( " Enter department ");
+
+    		   String department = scn.nextLine ();
+    		   
+    		   System.out.println ( " Enter salary ");
+
+    		   double salary  = scn.nextDouble();
+    		   System.out.println ( " Enter email ");
+scn.nextLine ();
+    		   String email = scn.nextLine ();
+
+    		   st.executeUpdate (" insert into  employee (name , department, salary, email) values ('"+name+"', '"+department+"' , "+salary+", '"+email+"')");
+    		   System.out.println ( " data enteres successfully");		   
+    	  }
+    	  break;
+    	  case 2 : System.out.println ( " Retrieve data from table ");
+    	  ResultSet rs =  st.executeQuery("Select * from employee");
+    	  while ( rs.next())
+    	  {    		  System.out.println (rs.getInt(1));
+
+    		  System.out.println (rs.getString(2));
+    		  System.out.println (rs.getString(3));
+    		  System.out.println (rs.getDouble(4));
+    		  System.out.println (rs.getString(5));
+
+
+    	  }
+    	  break;
+    	  case 3 : System.out.println ( " Update the salary of employee ");
+    	  
+System.out.println ( " Ente the name of employee ");
+scn.nextLine ();
+
+ String uname = scn.nextLine();
+ System.out.println ( " Enter  salary to be updated ");
+ double usalary = scn.nextDouble ();
+ st.executeUpdate (" update  employee set salary= "+usalary+" where name = '"+ uname+"';"); 
+ System.out.println ("data updated successfully");
+ break ;
+    	  case 4:  System.out.println ( " Enter id to delete record ");
+    	  int did = scn.nextInt ();
+    	  st.executeUpdate("delete from  employee  where id =  "+did+";" );
+    	  System.out.println (" data deleted  successfully");
+    	  break;
+    	  case 5 : System.out.println ( " Exiting the program .....");
+break;
+ 
+    	  }
+     
+    	  
+    	  
+     }while ( choice !=5);
+     
+	}
+	
+    
+     
+     
+}
