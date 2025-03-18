@@ -1,0 +1,92 @@
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+class Demo2 {
+    public static void main(String[] args) throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/University";
+        Connection con = DriverManager.getConnection(url, "root", "root");
+        System.out.println("connection done 2");
+        Statement st = con.createStatement();
+        System.out.println("statement object created");
+        
+        // Uncomment this if table is not created yet
+        // st.executeUpdate("create table university (id int unique key auto_increment, name varchar(50), age int, course varchar(50), email varchar(100))");
+        System.out.println("table created");
+        
+        System.out.println("Enter 1 to insert data, 2 to retrieve data, 3 to update data, 4 to delete data , 5 to exit program ");
+        Scanner scn = new Scanner(System.in);
+        int choice;
+        do {
+        choice= scn.nextInt();
+        scn.nextLine();
+
+        switch (choice) {
+            case 1:
+                System.out.println("Enter number to record entries ");
+                int n = scn.nextInt();
+                scn.nextLine();
+                for (int i = 0; i < n; i++) {
+                  System.out.println("Enter name ");
+                    String name = scn.nextLine();
+
+                    System.out.println("Enter age ");
+                    int age = Integer.parseInt(scn.nextLine());
+
+                    System.out.println("Enter course ");
+                    String course = scn.nextLine();
+
+                    System.out.println("Enter email ");
+                    String email = scn.nextLine();
+
+                    st.executeUpdate("insert into university (name, age, course, email) values ('" + name + "', " + age + ", '" + course + "', '" + email + "')");
+                    System.out.println("Data inserted successfully");
+                }
+                break;
+
+            case 2:
+                System.out.println("Retrieving data from table...");
+                ResultSet rs = st.executeQuery("Select * from university");
+                while (rs.next()) {
+                    System.out.println(rs.getInt(1));
+                    System.out.println(rs.getString(2));
+                    System.out.println(rs.getInt(3));
+                    System.out.println(rs.getString(4));
+                    System.out.println(rs.getString(5));
+                }
+                break;
+
+            case 3:
+                System.out.println("Enter name ");
+                String uname = scn.nextLine();
+
+                System.out.println("Enter course name ");
+                String ucourse = scn.nextLine();
+
+                st.executeUpdate("update university set course = '" + ucourse + "' where name = '" + uname + "'");
+                System.out.println("Data updated successfully!");
+                break;
+
+            case 4:
+                System.out.println("Enter name of student to delete: ");
+                String dname = scn.nextLine();
+                st.executeUpdate("DELETE FROM university WHERE name = '" + dname + "'");
+                System.out.println("Record deleted successfully.");
+                break;
+            case 5 : System.out.println ( " exiting  the program ....");
+            System.out.println ( " byee...");
+            break;
+
+            default:
+                System.out.println("Invalid choice. Please enter a valid option.");
+                break;
+        }
+        } while (choice!=5);
+
+    }
+}
