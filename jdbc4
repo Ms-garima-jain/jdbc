@@ -1,0 +1,109 @@
+QNO 1:-
+1. Create a Table
+Write a JDBC program to create a table named employees with columns:
+id (INT, PRIMARY KEY)
+name (VARCHAR(50))
+salary (DOUBLE)
+2. Insert Records
+Write a JDBC program to insert three employee records into the employees table.
+3. Retrieve and Display Records
+Write a JDBC program to retrieve and display all employee details from the employees table.
+4. Update a Record
+Write a JDBC program to update the salary of an employee with a specific id.
+5. Delete a Record
+Write a JDBC program to delete an employee record based on the given id.
+6. Count Total Employees
+Write a JDBC program to count the total number of employees in the employees table and display the count.
+--------------------------------------------------------------------------------
+
+
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+public class Demo4 {
+	public static void main ( String [] args ) throws SQLException
+	{
+		String url = "jdbc:mysql://localhost:3306/Emp";
+	     Connection con = DriverManager.getConnection(url, "root", "root");
+	     System.out.println("connection done 4");
+	     Statement st = con.createStatement();
+	     System.out.println("statement object created");
+	    // st.executeUpdate("create table employees (id int primary key, name varchar (50) , salary double ) ");
+	     System.out.println (" table created");
+	     System.out.println ( " enter 1 to insert record , insert 2 to retrieve, insert 3 update , insert 4 delete records , insert 5 to count  employees, insert 6 to exit");
+	     int choice ;
+	     Scanner scn = new Scanner ( System .in);
+	     do {
+	     choice = scn.nextInt ();
+	     scn.nextLine();
+	     switch (choice )
+	     {
+	     
+	     case 1 : 
+	    	 System.out.println ( " Enter number to record entries ");
+	    	 int n = scn.nextInt ();
+	    	 for ( int i =0; i<n ; i++) {
+	    	 System.out.println ( " Enter id ");
+	    	 int id = scn.nextInt ();
+	    	 System.out.println ("enter name");
+	    	 scn.nextLine();
+	    	 String name = scn.nextLine();
+	    	 System.out.println ( " Enter salary");
+	    	  double salary = scn.nextDouble();
+	    	  scn.nextLine();
+	    	  
+	    	 
+	    	 st.executeUpdate ("insert into employees (id , name , salary) values ( "+id+", '"+name+"', "+salary+")");
+	    	 System.out.println ( " data entered successfully");
+	    	 }
+	    	 break;
+	     case 2 : System.out.println ( " retrive data from employees");
+	     ResultSet rs  =st.executeQuery(" select * from  employees");
+	     while (rs.next()	 )
+	     {
+	    	 System.out.println (rs.getInt (1));
+	    	 System.out.println (rs.getString(2));
+	    	 System.out.println (rs.getDouble (3));	 
+	     }
+	     break;
+	     case 3 :System.out.println ( " enter id to update salary");
+	     int id = scn.nextInt();
+	     System.out.println ( " Enter salary");
+	     double usalary = scn.nextDouble();
+	     st.executeUpdate ("update  employees set salary = "+usalary+" where id = "+id+";" );
+	     
+	     System.out.println (" data updated successfullyu");
+	     break;
+	     
+	     case 4 : System.out.println (" Enter id to delete record ");
+	     int did = scn.nextInt ();
+	     st.executeUpdate(" delete from employees where id ="+did+"; ");
+	      System.out.println ( " data deleted successfully");
+	      break;
+	     case 5 :  System.out.println (" count number of employees");
+	     ResultSet rss =st.executeQuery("select COUNT(*)as total from employees");
+	     while (rss.next())
+	     {
+	    	System.out.println ( rss.getInt(1));
+	    	
+	     }
+	     break;
+	     case 6 : System.out.println ("Exiting.....");
+	     System.out.println  (" bye..");
+	     break;
+	     
+	     
+	     }
+	     }while(choice!=6);
+	     
+	     
+	     
+	}
+
+}
